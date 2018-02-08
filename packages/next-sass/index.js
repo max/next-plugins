@@ -4,14 +4,12 @@ const cssLoaderConfig = require('@zeit/next-css/css-loader-config')
 module.exports = (nextConfig = {}) => {
   return Object.assign({}, nextConfig, {
     webpack(config, options) {
-      if (!options.defaultLoaders) {
-        throw new Error(
-          'This plugin is not compatible with Next.js versions below 5.0.0 https://err.sh/next-plugins/upgrade'
-        )
+      if(!options.defaultLoaders) {
+        throw new Error('This plugin is not compatible with Next.js versions below 5.0.0 https://err.sh/next-plugins/upgrade')
       }
 
       const { dev, isServer } = options
-      const { cssModules } = nextConfig
+      const { cssModules, sassOptions } = nextConfig
       // Support the user providing their own instance of ExtractTextPlugin.
       // If extractCSSPlugin is not defined we pass the same instance of ExtractTextPlugin to all css related modules
       // So that they compile to the same file in production
@@ -34,7 +32,7 @@ module.exports = (nextConfig = {}) => {
         cssModules,
         dev,
         isServer,
-        loaders: ['sass-loader']
+        loaders: [{ loader: 'sass-loader', options: sassOptions }]
       })
 
       config.module.rules.push(
